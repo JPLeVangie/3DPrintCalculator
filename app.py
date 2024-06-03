@@ -1,4 +1,5 @@
 from flask import Flask, render_template, request, jsonify
+import math
 
 app = Flask(__name__)
 
@@ -17,7 +18,8 @@ def calculate_3d_print_cost(material_cost_per_gram, total_grams, printing_hours,
     total_labor_cost = total_labor_time_hours * labor_hourly_rate
     total_machine_cost = total_printing_time_hours * machine_hourly_cost
     full_cost = total_material_cost + total_labor_cost + total_machine_cost
-    return full_cost
+    rounded_cost = math.floor(full_cost * 100) / 100  # Round down to the nearest cent
+    return rounded_cost
 
 @app.route('/', methods=['GET', 'POST'])
 def index():
