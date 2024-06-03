@@ -4,6 +4,18 @@ This project is a web-based 3D Print Cost Calculator built using Flask and Boots
 
 ![firefox_3JiMD8fwVs](https://github.com/JPLeVangie/3DPrintCalculator/assets/47614776/d9a93750-f65a-454c-b7f4-86c42df32107)
 
+## Default Values
+
+### Default Values for pricing:
+#### Filaments
+- PLA  = $0.05/g
+- PETG = $0.06/g
+- TPU  = $0.07/g
+- ABS  = $0.08/g
+
+#### Labor and Machine Time
+- Labor        = $20/Hr
+- Machine Cost = $0.15/Hr
 
 ## Features
 
