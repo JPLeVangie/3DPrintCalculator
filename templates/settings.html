@@ -1,0 +1,71 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <title>Settings - 3D Print Cost Calculator</title>
+    <style>
+      body {
+        background-color: #343a40;
+        color: #f8f9fa;
+        padding-top: 20px;
+      }
+      .container {
+        max-width: 500px;
+      }
+      .form-control {
+        background-color: #495057;
+        color: #f8f9fa;
+        border: 1px solid #ced4da;
+      }
+      .form-control:focus {
+        background-color: #495057;
+        color: #f8f9fa;
+        border-color: #80bdff;
+      }
+      .btn-primary {
+        background-color: #007bff;
+        border-color: #007bff;
+      }
+      .btn-primary:hover {
+        background-color: #0056b3;
+        border-color: #004085;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <h2 class="text-center">Settings</h2>
+      <form method="POST" class="mt-4">
+        <div class="form-group">
+          <label for="material_cost_pla">PLA Cost per Gram (USD):</label>
+          <input type="text" class="form-control" id="material_cost_pla" name="material_cost_pla" value="{{ preferences.material_cost_pla }}" required>
+        </div>
+        <div class="form-group">
+          <label for="material_cost_petg">PETG Cost per Gram (USD):</label>
+          <input type="text" class="form-control" id="material_cost_petg" name="material_cost_petg" value="{{ preferences.material_cost_petg }}" required>
+        </div>
+        <div class="form-group">
+          <label for="material_cost_tpu">TPU Cost per Gram (USD):</label>
+          <input type="text" class="form-control" id="material_cost_tpu" name="material_cost_tpu" value="{{ preferences.material_cost_tpu }}" required>
+        </div>
+        <div class="form-group">
+          <label for="material_cost_abs">ABS Cost per Gram (USD):</label>
+          <input type="text" class="form-control" id="material_cost_abs" name="material_cost_abs" value="{{ preferences.material_cost_abs }}" required>
+        </div>
+        <div class="form-group">
+          <label for="labor_hourly_rate">Labor Hourly Rate (USD):</label>
+          <input type="text" class="form-control" id="labor_hourly_rate" name="labor_hourly_rate" value="{{ preferences.labor_hourly_rate }}" required>
+        </div>
+        <div class="form-group">
+          <label for="machine_hourly_cost">Machine Hourly Cost (USD):</label>
+          <input type="text" class="form-control" id="machine_hourly_cost" name="machine_hourly_cost" value="{{ preferences.machine_hourly_cost }}" required>
+        </div>
+        <button type="submit" class="btn btn-primary btn-block">Save Settings</button>
+      </form>
+      <a href="/" class="btn btn-secondary btn-block mt-3">Back to Calculator</a>
+    </div>
+  </body>
+</html>

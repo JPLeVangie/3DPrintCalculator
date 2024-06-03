@@ -4,6 +4,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
     <title>3D Print Cost Calculator</title>
     <style>
       body {
@@ -36,11 +37,19 @@
         background-color: #17a2b8;
         color: #f8f9fa;
       }
+      .settings-icon {
+        position: absolute;
+        top: 20px;
+        right: 20px;
+        color: #f8f9fa;
+        cursor: pointer;
+      }
     </style>
   </head>
   <body>
     <div class="container">
       <h2 class="text-center">3D Print Cost Calculator</h2>
+      <i class="fas fa-cog settings-icon" onclick="window.location.href='/settings'"></i>
       <form id="costForm" method="POST" class="mt-4">
         <div class="form-group">
           <label for="material_type">Select Material Type:</label>
