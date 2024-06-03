@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request
+from flask import Flask, render_template, request, jsonify
 
 app = Flask(__name__)
 
@@ -21,7 +21,6 @@ def calculate_3d_print_cost(material_cost_per_gram, total_grams, printing_hours,
 
 @app.route('/', methods=['GET', 'POST'])
 def index():
-    cost = None
     if request.method == 'POST':
         material_type = request.form['material_type']
         material_cost_per_gram = material_types[material_type]
@@ -35,7 +34,10 @@ def index():
 
         cost = calculate_3d_print_cost(material_cost_per_gram, total_grams, printing_hours, printing_minutes, labor_hours, labor_minutes, labor_hourly_rate, machine_hourly_cost)
 
-    return render_template('index.html', cost=cost, materials=material_types.keys())
+        # Return the result as JSON for AJAX
+        return jsonify({'cost': cost})
+
+    return render_template('index.html', materials=material_types.keys())
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=5000, debug=True)
