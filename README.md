@@ -32,6 +32,17 @@ All Values can be adjusted in the settings menu found in the top-right corner. T
 
 ## Installation
 
+1. Pull the Docker container:
+
+   ```sh
+   docker run -p 5000:5000 jlevangie/3d-print-cost-calculator
+   ```
+
+2. Open your web browser and navigate to `http://localhost:5000`.
+
+
+### Manual Installation
+
 1. Clone the repository:
 
    ```sh
