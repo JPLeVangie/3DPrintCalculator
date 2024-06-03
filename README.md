@@ -1,6 +1,5 @@
 ### README.md
 
-```markdown
 # 3D Print Cost Calculator
 
 This project is a web-based 3D Print Cost Calculator built using Flask and Bootstrap. It calculates the total cost of a 3D print based on the material type, total grams of material, printing time, and labor time.
@@ -78,4 +77,3 @@ This project is licensed under the MIT License. See the [LICENSE](LICENSE) file 
 - [Bootstrap](https://getbootstrap.com/)
 - [Flask](https://flask.palletsprojects.com/)
 - [jQuery](https://jquery.com/)
-```
