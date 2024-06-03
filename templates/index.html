@@ -14,6 +14,7 @@
       }
       .container {
         max-width: 500px;
+        position: relative;
       }
       .form-control {
         background-color: #495057;
@@ -39,17 +40,20 @@
       }
       .settings-icon {
         position: absolute;
-        top: 20px;
-        right: 20px;
+        top: 10px;
+        right: 10px;
         color: #f8f9fa;
         cursor: pointer;
+        font-size: 1.5rem;
       }
     </style>
   </head>
   <body>
     <div class="container">
-      <h2 class="text-center">3D Print Cost Calculator</h2>
-      <i class="fas fa-cog settings-icon" onclick="window.location.href='/settings'"></i>
+      <div class="d-flex justify-content-between align-items-center">
+        <h2 class="text-center">3D Print Cost Calculator</h2>
+        <i class="fas fa-cog settings-icon" onclick="window.location.href='/settings'"></i>
+      </div>
       <form id="costForm" method="POST" class="mt-4">
         <div class="form-group">
           <label for="material_type">Select Material Type:</label>

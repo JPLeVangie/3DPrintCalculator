@@ -7,7 +7,7 @@ This project is a web-based 3D Print Cost Calculator built using Flask and Boots
 
 ## Values for pricing:
 
-All Values can be adjusted in the settings menu found in the top-right corner. The default values are below:
+All Values can be adjusted in the settings menu. The default values are below:
 #### Filaments
 - PLA  = $0.05/g
 - PETG = $0.06/g
