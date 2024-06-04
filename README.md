@@ -23,7 +23,7 @@ All Values can be adjusted in the settings menu. The default values are below:
 - Select material type from a dropdown list.
 - Input total grams of material, printing hours, and minutes.
 - Input labor hours and minutes.
-- Calculate and display the total cost without refreshing the page.
+- Calculate and display the total cost.
 
 ## Prerequisites
 
