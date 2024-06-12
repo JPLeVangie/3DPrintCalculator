@@ -84,7 +84,9 @@ All Values can be adjusted in the settings menu. The default values are below:
 ├── app.py
 ├── requirements.txt
 └── templates/
-    └── index.html
+    ├── index.html
+    └── settings.html
+
 ```
 
 ## Technologies Used
