@@ -32,7 +32,7 @@ All Values can be adjusted in the settings menu. The default values are below:
 
 ## Installation
 
-## Via Docker
+### Via Docker
 
 1. Pull the Docker container:
 
