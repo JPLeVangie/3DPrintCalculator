@@ -79,10 +79,12 @@ All Values can be adjusted in the settings menu. The default values are below:
 ```
 3d-print-cost-calculator/
 │
-├── Dockerfile
-├── README.md
 ├── app.py
+├── Dockerfile
+├── models.py
 ├── requirements.txt
+├── LICENSE
+├── README.md
 └── templates/
     └── index.html
 ```
