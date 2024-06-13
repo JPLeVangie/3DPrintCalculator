@@ -86,7 +86,9 @@ All Values can be adjusted in the settings menu. The default values are below:
 ├── LICENSE
 ├── README.md
 └── templates/
-    └── index.html
+    ├── index.html
+    └── settings.html
+
 ```
 
 ## Technologies Used
