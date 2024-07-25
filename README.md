@@ -13,7 +13,7 @@ All Values can be adjusted in the settings menu. The default values are below:
 - PETG = $0.06/g
 - TPU  = $0.07/g
 - ABS  = $0.08/g
-
+- ASA  = $0.09/g
 #### Labor and Machine Time
 - Labor        = $20/Hr
 - Machine Cost = $0.15/Hr
