@@ -59,6 +59,7 @@ def index():
         "PETG": preferences.material_cost_petg,
         "TPU": preferences.material_cost_tpu,
         "ABS": preferences.material_cost_abs,
+        "ASA": preferences.material_cost_asa,
     }
 
     if request.method == 'POST':
@@ -93,6 +94,7 @@ def settings():
         preferences.material_cost_petg = float(request.form['material_cost_petg'])
         preferences.material_cost_tpu = float(request.form['material_cost_tpu'])
         preferences.material_cost_abs = float(request.form['material_cost_abs'])
+        preferences.material_cost_asa = float(request.form['material_cost_asa'])
         preferences.labor_hourly_rate = float(request.form['labor_hourly_rate'])
         preferences.machine_hourly_cost = float(request.form['machine_hourly_cost'])
         db.session.commit()
