@@ -11,6 +11,7 @@ class UserPreferences(db.Model):
     material_cost_petg = db.Column(db.Float, default=0.06)
     material_cost_tpu = db.Column(db.Float, default=0.07)
     material_cost_abs = db.Column(db.Float, default=0.08)
+    material_cost_asa = db.Column(db.Float, default=0.09)
     labor_hourly_rate = db.Column(db.Float, default=20.0)
     machine_hourly_cost = db.Column(db.Float, default=0.15)
 
