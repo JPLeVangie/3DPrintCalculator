@@ -7,6 +7,8 @@
   let materialLines = [];
   let result = null;
   let timer;
+  let requestController;
+  let selectedMargin = null;
 
   const numeric = (id) => Number($(id)?.value || 0);
   const money = (value) => `${symbols[$("currency")?.value] || "$"}${Number(value || 0).toFixed(2)}`;
@@ -78,17 +80,24 @@
   }
 
   async function calculate() {
+    requestController?.abort();
+    const controller = new AbortController();
+    requestController = controller;
+    document.querySelector(".result-card")?.classList.add("updating");
     try {
-      const response = await fetch("/api/calculate", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(state()) });
+      const response = await fetch("/api/calculate", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(state()), signal: controller.signal });
       if (!response.ok) throw new Error("Calculation failed");
       result = await response.json();
       renderResult(); notice("");
-    } catch (error) { notice(error.message, true); }
+    } catch (error) { if (error.name !== "AbortError") notice(error.message, true); }
+    finally { if (requestController === controller) document.querySelector(".result-card")?.classList.remove("updating"); }
   }
 
   function renderResult() {
-    $("total").textContent = money(result.total);
-    $("unitCost").textContent = money(result.unit_cost);
+    const selectedUnit = selectedMargin === null ? result.unit_cost : result.prices[String(selectedMargin)];
+    $("total").textContent = money(selectedUnit * result.quantity);
+    $("totalLabel").textContent = selectedMargin === null ? "ESTIMATED COST" : "SELECTED QUOTE";
+    $("unitCost").textContent = money(selectedUnit);
     $("summary").textContent = `${result.quantity} ${result.quantity === 1 ? "part" : "parts"}`;
     $("weightSummary").textContent = `${result.weight.toFixed(1)} g`;
     const entries = Object.entries(result.breakdown).filter(([, value]) => value > 0);
@@ -97,11 +106,21 @@
     $("meterFill").style.width = `${Math.min(100, maximum / Math.max(result.total, 1) * 100)}%`;
     [25, 40, 60, 80].forEach((margin) => $(`price${margin}`).textContent = money(result.prices[String(margin)]));
     $("priceCustom").textContent = money(result.prices.custom);
+    document.querySelectorAll("[data-margin]").forEach((control) => {
+      const active = String(selectedMargin) === control.dataset.margin;
+      control.classList.toggle("selected", active);
+      control.setAttribute("aria-pressed", String(active));
+    });
+  }
+
+  function selectMargin(margin) {
+    selectedMargin = margin;
+    if (result) renderResult();
   }
 
   function changed() {
     localStorage.setItem(draftKey, JSON.stringify(state()));
-    clearTimeout(timer); timer = setTimeout(calculate, 120);
+    clearTimeout(timer); timer = setTimeout(calculate, 70);
   }
 
   async function copyShare() {
@@ -156,6 +175,11 @@
   }
 
   document.querySelectorAll("#calculator input, #calculator select").forEach((input) => input.addEventListener("input", changed));
+  document.querySelectorAll(".price-grid [data-margin]").forEach((button) => button.addEventListener("click", () => selectMargin(Number(button.dataset.margin))));
+  const customPrice = document.querySelector(".custom-price");
+  customPrice.addEventListener("click", () => selectMargin("custom"));
+  customPrice.addEventListener("keydown", (event) => { if (event.key === "Enter" || event.key === " ") { event.preventDefault(); selectMargin("custom"); } });
+  $("customMargin").addEventListener("input", () => selectMargin("custom"));
   document.querySelectorAll(".mode").forEach((button) => button.addEventListener("click", () => {
     document.querySelectorAll(".mode").forEach((item) => { item.classList.toggle("active", item === button); item.setAttribute("aria-selected", item === button); });
     materialLines = [defaultLine(button.dataset.mode)]; renderMaterials(); changed();

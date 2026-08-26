@@ -48,14 +48,14 @@
       </form>
       <aside class="results" aria-label="Quote result">
         <div class="result-card">
-          <div class="result-top"><span class="eyebrow">ESTIMATED COST</span><label class="currency-select"><span class="sr-only">Currency</span><select id="currency">{% for code, symbol in currencies.items() %}<option value="{{ code }}">{{ code }} {{ symbol }}</option>{% endfor %}</select></label></div>
+          <div class="result-top"><span class="eyebrow" id="totalLabel">ESTIMATED COST</span><label class="currency-select"><span class="sr-only">Currency</span><select id="currency">{% for code, symbol in currencies.items() %}<option value="{{ code }}">{{ code }} {{ symbol }}</option>{% endfor %}</select></label></div>
           <div class="total" id="total">$0.00</div><p class="unit-total"><span id="unitCost">$0.00</span> per part · <span id="summary">1 part</span></p>
           <div class="meter"><span id="meterFill"></span></div><div class="meter-label"><span>Cost breakdown</span><span id="weightSummary">0 g</span></div>
           <div class="breakdown" id="breakdown"></div>
           <div class="quote-divider"></div>
           <div class="price-heading"><h3>Suggested price</h3><span>Profit margin</span></div>
           <div class="price-grid"><button type="button" data-margin="25"><span>25%</span><strong id="price25">$0.00</strong></button><button type="button" data-margin="40"><span>40%</span><strong id="price40">$0.00</strong></button><button type="button" data-margin="60"><span>60%</span><strong id="price60">$0.00</strong></button><button type="button" data-margin="80"><span>80%</span><strong id="price80">$0.00</strong></button></div>
-          <div class="custom-price"><label>Custom margin <span class="with-suffix"><input id="customMargin" type="number" min="0" max="99.9" step="1" value="50"><span>%</span></span></label><strong id="priceCustom">$0.00</strong></div>
+          <div class="custom-price" data-margin="custom" role="button" tabindex="0" aria-pressed="false"><label>Custom margin <span class="with-suffix"><input id="customMargin" type="number" min="0" max="99.9" step="1" value="50"><span>%</span></span></label><strong id="priceCustom">$0.00</strong></div>
           <button class="primary-button" id="share" type="button">↗ Share quote</button><button class="secondary-button" id="print" type="button">Print / export PDF</button>
         </div>
         <div class="save-card"><div><strong>Save your setup</strong><p>{% if logged_in %}Signed in as {{ user }}. Preferences and quotes sync to your account.{% else %}Calculate freely. {% if login_enabled %}<a href="/login">Log in</a> to sync presets and quote history.{% else %}Sign-in is not configured on this installation.{% endif %}{% endif %}</p></div><span class="save-icon">⌁</span></div>
