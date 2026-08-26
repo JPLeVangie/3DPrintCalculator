@@ -1,110 +1,69 @@
 <!doctype html>
-<html lang="en">
-  <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
-    <title>3D Print Cost Calculator</title>
-    <style>
-      body {
-        background-color: #343a40;
-        color: #f8f9fa;
-        padding-top: 20px;
-      }
-      .container {
-        max-width: 500px;
-        position: relative;
-      }
-      .form-control {
-        background-color: #495057;
-        color: #f8f9fa;
-        border: 1px solid #ced4da;
-      }
-      .form-control:focus {
-        background-color: #495057;
-        color: #f8f9fa;
-        border-color: #80bdff;
-      }
-      .btn-primary {
-        background-color: #007bff;
-        border-color: #007bff;
-      }
-      .btn-primary:hover {
-        background-color: #0056b3;
-        border-color: #004085;
-      }
-      .alert-info {
-        background-color: #17a2b8;
-        color: #f8f9fa;
-      }
-      .settings-icon {
-        position: absolute;
-        top: 10px;
-        right: 10px;
-        color: #f8f9fa;
-        cursor: pointer;
-        font-size: 1.5rem;
-      }
-    </style>
-  </head>
-  <body>
-    <div class="container">
-      <div class="d-flex justify-content-between align-items-center">
-        <h2 class="text-center">3D Print Cost Calculator</h2>
-        <i class="fas fa-cog settings-icon" onclick="window.location.href='/settings'"></i>
-      </div>
-      <form id="costForm" method="POST" class="mt-4">
-        <div class="form-group">
-          <label for="material_type">Select Material Type:</label>
-          <select class="form-control" id="material_type" name="material_type" required>
-            {% for material in materials %}
-            <option value="{{ material }}">{{ material }}</option>
-            {% endfor %}
-          </select>
-        </div>
-        <div class="form-group">
-          <label for="total_grams">Total Grams of Material:</label>
-          <input type="text" class="form-control" id="total_grams" name="total_grams" required>
-        </div>
-        <div class="form-group">
-          <label for="printing_hours">Total Printing Hours:</label>
-          <input type="text" class="form-control" id="printing_hours" name="printing_hours">
-        </div>
-        <div class="form-group">
-          <label for="printing_minutes">Total Printing Minutes:</label>
-          <input type="text" class="form-control" id="printing_minutes" name="printing_minutes">
-        </div>
-        <div class="form-group">
-          <label for="labor_hours">Total Labor Hours:</label>
-          <input type="text" class="form-control" id="labor_hours" name="labor_hours">
-        </div>
-        <div class="form-group">
-          <label for="labor_minutes">Total Labor Minutes:</label>
-          <input type="text" class="form-control" id="labor_minutes" name="labor_minutes">
-        </div>
-        <button type="submit" class="btn btn-primary btn-block">Calculate Cost</button>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="description" content="A fast, transparent 3D printing quote calculator for FDM and resin prints.">
+  <title>Printwise — 3D print cost calculator</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+  <header class="topbar">
+    <a class="brand" href="/"><span class="brand-mark">P</span><span>printwise</span></a>
+    <nav aria-label="Primary navigation">
+      <button class="text-button" id="themeToggle" type="button" aria-label="Toggle dark mode">◐ <span>Theme</span></button>
+      {% if logged_in %}<a class="text-button" href="/logout">Log out</a>{% elif login_enabled %}<a class="text-button" href="/login">Log in</a>{% else %}<span class="login-state">Local mode</span>{% endif %}
+    </nav>
+  </header>
+  <main class="shell">
+    <section class="hero">
+      <div><p class="eyebrow">PRINT PRICING, WITHOUT THE GUESSWORK</p><h1>Know what your print<br><em>really costs.</em></h1><p class="lede">A transparent calculator for makers and small print shops. Dial in your inputs, see every cost, and quote with confidence.</p></div>
+      <div class="hero-note"><span class="pulse"></span><strong>Private by default</strong><span>Your draft stays in this browser.</span></div>
+    </section>
+    <div id="notice" class="notice" role="status" aria-live="polite"></div>
+    <div class="workspace">
+      <form id="calculator" novalidate>
+        <div class="mode-tabs" role="tablist" aria-label="Print type"><button class="mode active" type="button" data-mode="FDM" role="tab" aria-selected="true">▦ <span>FDM / Filament</span></button><button class="mode" type="button" data-mode="Resin" role="tab" aria-selected="false">◈ <span>Resin</span></button></div>
+        <section class="card input-card">
+          <div class="section-heading"><div><span class="step">01</span><h2>Print details</h2></div><button class="ghost-button" id="reset" type="button">Reset draft</button></div>
+          <label>Part name <input id="partName" type="text" maxlength="120" placeholder="e.g. Custom enclosure"></label>
+          <div class="field-grid three"><label>Batch quantity <input id="quantity" type="number" min="1" max="100000" step="1" value="1"><small>Parts in this run</small></label><label>Print hours <input id="printHours" type="number" min="0" step="0.1" value="6"></label><label>Print minutes <input id="printMinutes" type="number" min="0" max="59" step="1" value="30"></label></div>
+          <div class="field-grid"><label>Weight (g) <input id="weight" type="number" min="0" step="0.1" value="84"></label><label>Volume (cm³) <input id="volume" type="number" min="0" step="0.1" placeholder="Optional"></label></div>
+        </section>
+        <section class="card input-card">
+          <div class="section-heading"><div><span class="step">02</span><h2>Materials</h2></div><button class="add-button" id="addMaterial" type="button">＋ Add material</button></div>
+          <div id="materials"></div>
+          <p class="hint">Add lines for multi-material prints. Cost is per gram; volume is optional.</p>
+        </section>
+        <section class="card input-card">
+          <div class="section-heading"><div><span class="step">03</span><h2>Extras &amp; labor</h2></div><button class="collapse-button" type="button" data-target="advanced" aria-expanded="false" aria-controls="advanced">Show advanced</button></div>
+          <div class="field-grid three"><label>Labor hours <input id="laborHours" type="number" min="0" step="0.1" value="0.25"></label><label>Labor minutes <input id="laborMinutes" type="number" min="0" max="59" step="1" value="0"></label><label>Labor rate <span class="with-prefix"><span class="currency-prefix">$</span><input id="laborRate" type="number" min="0" step="0.01" value="20"></span></label></div>
+          <div class="field-grid three"><label>Hardware <span class="with-prefix"><span class="currency-prefix">$</span><input id="hardware" type="number" min="0" step="0.01" value="0"></span></label><label>Packaging <span class="with-prefix"><span class="currency-prefix">$</span><input id="packaging" type="number" min="0" step="0.01" value="0.75"></span></label><label>Tax rate <span class="with-suffix"><input id="taxRate" type="number" min="0" max="100" step="0.1" value="0"><span>%</span></span></label></div>
+          <div class="advanced" id="advanced" hidden>
+            <div class="field-grid three"><label>Electricity <span class="with-prefix"><span class="currency-prefix">$</span><input id="electricityRate" type="number" min="0" step="0.001" value="0.16"></span><small>per kWh</small></label><label>Printer power (W) <input id="powerWatts" type="number" min="0" step="1" value="120"></label><label>Waste rate <span class="with-suffix"><input id="wasteRate" type="number" min="0" max="100" step="1" value="10"><span>%</span></span></label></div>
+            <div class="field-grid three"><label>Printer cost <span class="with-prefix"><span class="currency-prefix">$</span><input id="printerCost" type="number" min="0" step="1" value="800"></span></label><label>Printer life (hours) <input id="printerLifeHours" type="number" min="1" step="100" value="3000"></label><label>Maintenance / hour <span class="with-prefix"><span class="currency-prefix">$</span><input id="maintenanceRate" type="number" min="0" step="0.01" value="0.05"></span></label></div>
+            <div class="field-grid three"><label>Failure reserve <span class="with-suffix"><input id="failureRate" type="number" min="0" max="100" step="1" value="5"><span>%</span></span></label><label>Overhead <span class="with-suffix"><input id="overheadRate" type="number" min="0" max="100" step="1" value="0"><span>%</span></span></label><label>One-time setup <span class="with-prefix"><span class="currency-prefix">$</span><input id="setupCost" type="number" min="0" step="0.01" value="0"></span></label></div>
+            <div class="field-grid"><label>One-time setup labor (minutes)<input id="setupMinutes" type="number" min="0" step="1" value="0"><small>Applied once to the batch</small></label></div>
+          </div>
+        </section>
       </form>
-      <div id="result" class="alert alert-info mt-4" role="alert" style="display: none;">
-        <h2 class="text-center">Total Cost: $<span id="cost"></span> USD</h2>
-      </div>
+      <aside class="results" aria-label="Quote result">
+        <div class="result-card">
+          <div class="result-top"><span class="eyebrow">ESTIMATED COST</span><label class="currency-select"><span class="sr-only">Currency</span><select id="currency">{% for code, symbol in currencies.items() %}<option value="{{ code }}">{{ code }} {{ symbol }}</option>{% endfor %}</select></label></div>
+          <div class="total" id="total">$0.00</div><p class="unit-total"><span id="unitCost">$0.00</span> per part · <span id="summary">1 part</span></p>
+          <div class="meter"><span id="meterFill"></span></div><div class="meter-label"><span>Cost breakdown</span><span id="weightSummary">0 g</span></div>
+          <div class="breakdown" id="breakdown"></div>
+          <div class="quote-divider"></div>
+          <div class="price-heading"><h3>Suggested price</h3><span>Profit margin</span></div>
+          <div class="price-grid"><button type="button" data-margin="25"><span>25%</span><strong id="price25">$0.00</strong></button><button type="button" data-margin="40"><span>40%</span><strong id="price40">$0.00</strong></button><button type="button" data-margin="60"><span>60%</span><strong id="price60">$0.00</strong></button><button type="button" data-margin="80"><span>80%</span><strong id="price80">$0.00</strong></button></div>
+          <div class="custom-price"><label>Custom margin <span class="with-suffix"><input id="customMargin" type="number" min="0" max="99.9" step="1" value="50"><span>%</span></span></label><strong id="priceCustom">$0.00</strong></div>
+          <button class="primary-button" id="share" type="button">↗ Share quote</button><button class="secondary-button" id="print" type="button">Print / export PDF</button>
+        </div>
+        <div class="save-card"><div><strong>Save your setup</strong><p>{% if logged_in %}Signed in as {{ user }}. Preferences and quotes sync to your account.{% else %}Calculate freely. {% if login_enabled %}<a href="/login">Log in</a> to sync presets and quote history.{% else %}Sign-in is not configured on this installation.{% endif %}{% endif %}</p></div><span class="save-icon">⌁</span></div>
+      </aside>
     </div>
-    <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
-    <script>
-      $(document).ready(function(){
-        $('#costForm').on('submit', function(event){
-          event.preventDefault();
-          $.ajax({
-            url: '/',
-            method: 'POST',
-            data: $(this).serialize(),
-            success: function(response){
-              $('#cost').text(response.cost);
-              $('#result').show();
-            }
-          });
-        });
-      });
-    </script>
-  </body>
+  </main>
+  <footer><span>printwise</span><span>Transparent pricing for every print.</span><span><a href="/healthz">System status</a></span></footer>
+  <script>window.PRINTWISE = {materials: {{ materials|tojson }}, loggedIn: {{ logged_in|tojson }}};</script>
+  <script src="{{ url_for('static', filename='app.js') }}"></script>
+</body>
 </html>
